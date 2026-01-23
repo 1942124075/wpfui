@@ -7,6 +7,7 @@
 
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Windows.Controls;
 using Wpf.Ui.Abstractions;
 
 // ReSharper disable once CheckNamespace
@@ -18,6 +19,11 @@ namespace Wpf.Ui.Controls;
 public partial class NavigationView
 {
     protected List<string> Journal { get; } = new(50);
+    
+    /// <summary>
+    /// 页面缓存
+    /// </summary>
+    private readonly Dictionary<string, object?> _customCache = [];
 
     protected ObservableCollection<INavigationViewItem> NavigationStack { get; } = [];
 
@@ -272,20 +278,48 @@ public partial class NavigationView
             );
         }
 
+        // 先读取缓存的页面
+        if (viewItem is NavigationViewItem { Tag: not null } navigationViewItem)
+        {
+            if (_customCache.TryGetValue(navigationViewItem.Tag.ToString() + viewItem.TargetPageType, out var cachePage))
+            {
+                if (cachePage != null)
+                {
+                    return cachePage;
+                }
+            }
+        }
+
         if (_serviceProvider is not null)
         {
-            return _serviceProvider.GetService(viewItem.TargetPageType)
-                ?? throw new InvalidOperationException(
-                    $"{nameof(_serviceProvider)}.{nameof(_serviceProvider.GetService)} returned null for type {viewItem.TargetPageType}."
-                );
+            var itemInstance = _serviceProvider.GetService(viewItem.TargetPageType)
+                               ?? throw new InvalidOperationException(
+                                   $"{nameof(_serviceProvider)}.{nameof(_serviceProvider.GetService)} returned null for type {viewItem.TargetPageType}."
+                               );
+
+            // 添加到缓存
+            if (viewItem is NavigationViewItem { Tag: not null } navigationViewItemCache)
+            {
+                _customCache.Add(navigationViewItemCache.Tag.ToString() + viewItem.TargetPageType, itemInstance);
+            }
+
+            return itemInstance;
         }
 
         if (_pageService is not null)
         {
-            return _pageService.GetPage(viewItem.TargetPageType)
-                ?? throw new InvalidOperationException(
-                    $"{nameof(_pageService)}.{nameof(_pageService.GetPage)} returned null for type {viewItem.TargetPageType}."
-                );
+            var itemInstance = _pageService.GetPage(viewItem.TargetPageType)
+                               ?? throw new InvalidOperationException(
+                                   $"{nameof(_pageService)}.{nameof(_pageService.GetPage)} returned null for type {viewItem.TargetPageType}."
+                               );
+
+            // 添加到缓存
+            if (viewItem is NavigationViewItem { Tag: not null } navigationViewItemCache)
+            {
+                _customCache.Add(navigationViewItemCache.Tag.ToString() + viewItem.TargetPageType, itemInstance);
+            }
+
+            return itemInstance;
         }
 
         return _cache.Remember(
