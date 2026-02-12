@@ -154,4 +154,76 @@ public class ContentDialogService : IContentDialogService
 
 #pragma warning restore CS0618 // (Warning: Obsolete)
     }
+
+    /// <summary>
+    /// 对话框显示异步
+    /// </summary>
+    public async Task<object?> ShowDialogAsync(ContentDialog dialog, object? parameter = null, CancellationToken cancellationToken = default)
+    {
+        if (dialog == null)
+        {
+            throw new ArgumentNullException(nameof(dialog));
+        }
+
+        if (_dialogHostEx == null && _dialogHost == null)
+        {
+            throw new InvalidOperationException("The DialogHost was never set.");
+        }
+
+        object? returnRes = null;
+
+        bool isClose = false;
+
+        if (dialog is FrameworkElement element && element.DataContext is IDialogDataContext dialogContext)
+        {
+            dialog.Opened += (sender, args) =>
+            {
+                dialogContext.OnDialogOpened(parameter);
+            };
+            dialog.Closing += (sender, args) =>
+            {
+                if (!isClose)
+                {
+                    dialogContext.OnDialogClosing(args);
+                }
+            };
+            dialogContext.RequestClose += (result) =>
+            {
+                returnRes = result;
+                dialogContext.RequestClose -= null!;
+                isClose = true;
+                dialog.Hide();
+            };
+        }
+        else
+        {
+            throw new InvalidOperationException(
+                "The object being called is not IDialogDataMext."
+            );
+        }
+
+        object? svcHost = _dialogHostEx is not null ? _dialogHostEx : _dialogHost;
+
+        object? dlgHost = dialog.DialogHostEx is not null ? dialog.DialogHostEx : dialog.DialogHost;
+
+        if (dlgHost != null && !ReferenceEquals(dlgHost, svcHost))
+        {
+            throw new InvalidOperationException(
+                "The DialogHost is not the same as the one that was previously set."
+            );
+        }
+
+        if (_dialogHostEx != null)
+        {
+            dialog.DialogHostEx = _dialogHostEx;
+        }
+        else
+        {
+            dialog.DialogHost = _dialogHost;
+        }
+
+        _ = await dialog.ShowAsync(cancellationToken);
+
+        return returnRes;
+    }
 }

@@ -27,6 +27,7 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox
 {
     // Template part names
     private const string PART_ClearButton = nameof(PART_ClearButton);
+
     private const string PART_InlineIncrementButton = nameof(PART_InlineIncrementButton);
     private const string PART_InlineDecrementButton = nameof(PART_InlineDecrementButton);
 
@@ -237,8 +238,33 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox
         : base()
     {
         NumberFormatter ??= NumberBox.GetRegionalSettingsAwareDecimalFormatter();
-
         DataObject.AddPastingHandler(this, OnClipboardPaste);
+        this.PreviewMouseWheel += NumberBox_MouseWheel;
+    }
+
+    private void NumberBox_MouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        if (sender is not TextBox textBox)
+        {
+            return;
+        }
+
+        if (!double.TryParse(textBox.Text, out var _))
+        {
+            return;
+        }
+
+        if (e.Delta > 0)
+        {
+            StepValue(SmallChange);
+        }
+        else
+        {
+            StepValue(-SmallChange);
+        }
+
+        // 阻止事件继续冒泡（防止父控件滚动）
+        e.Handled = true;
     }
 
     /// <inheritdoc />
@@ -255,14 +281,17 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox
                 StepValue(LargeChange);
                 e.Handled = true;
                 break;
+
             case Key.PageDown:
                 StepValue(-LargeChange);
                 e.Handled = true;
                 break;
+
             case Key.Up:
                 StepValue(SmallChange);
                 e.Handled = true;
                 break;
+
             case Key.Down:
                 StepValue(-SmallChange);
                 e.Handled = true;
@@ -421,6 +450,8 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox
             newValue += change ?? 0d;
         }
 
+        newValue = Math.Round(newValue, MaxDecimalPlaces);
+
         SetCurrentValue(ValueProperty, newValue);
 
         MoveCaretToTextEnd();
@@ -512,6 +543,7 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox
         public static partial void InfoWriteLineForButtonClick(object sender);
 
 #if DEBUG
+
         public static partial void InfoWriteLine(string debugLine)
         {
             System.Diagnostics.Debug.WriteLine($"INFO: {debugLine}", "Wpf.Ui.NumberBox");

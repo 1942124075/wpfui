@@ -219,7 +219,6 @@ public partial class NavigationView
             $"DEBUG | {viewItem.Id} - {(string.IsNullOrEmpty(viewItem.TargetPageTag) ? "NO_TAG" : viewItem.TargetPageTag)} - {viewItem.TargetPageType} | NAVIGATED"
         );
 
-        OnNavigated(pageInstance);
 
         // Set up the association before setting DataContext
         if (pageInstance is FrameworkElement frameworkElement)
@@ -243,6 +242,7 @@ public partial class NavigationView
             OnSelectionChanged();
         }
 
+        OnNavigated(pageInstance);
         return true;
     }
 
