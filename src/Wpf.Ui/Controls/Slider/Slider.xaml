@@ -7,8 +7,8 @@
 
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!--  还没走过的滑轨样式  -->
-    <Style x:Key="UiSliderIncreaseRepeatButtonStyle" TargetType="{x:Type RepeatButton}">
+    <!--  垂直还没走过的滑轨样式  -->
+    <Style x:Key="UiSliderVerticalIncreaseRepeatButtonStyle" TargetType="{x:Type RepeatButton}">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="False" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -26,8 +26,8 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <!--  已经走过的滑轨样式  -->
-    <Style x:Key="UiSliderDecreaseRepeatButtonStyle" TargetType="{x:Type RepeatButton}">
+    <!--  垂直已经走过的滑轨样式  -->
+    <Style x:Key="UiSliderVerticalDecreaseRepeatButtonStyle" TargetType="{x:Type RepeatButton}">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Focusable" Value="False" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -37,6 +37,45 @@
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
                     <Border
                         Width="4"
+                        Margin="0"
+                        Background="{DynamicResource SliderThumbBackground}"
+                        BorderThickness="0"
+                        CornerRadius="2" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--  水平还没走过的滑轨样式  -->
+    <Style x:Key="UiSliderHorizontalIncreaseRepeatButtonStyle" TargetType="{x:Type RepeatButton}">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <Border
+                        Height="4"
+                        Margin="0"
+                        Background="{DynamicResource SliderTrackFill}"
+                        BorderThickness="0"
+                        CornerRadius="2" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--  水平已经走过的滑轨样式  -->
+    <Style x:Key="UiSliderHorizontalDecreaseRepeatButtonStyle" TargetType="{x:Type RepeatButton}">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <Border
+                        Height="4"
                         Margin="0"
                         Background="{DynamicResource SliderThumbBackground}"
                         BorderThickness="0"
@@ -97,18 +136,18 @@
                 Grid.Row="1"
                 Height="4"
                 Margin="0"
-                Background="{DynamicResource SliderTrackFill}"
+                Background="Transparent"
                 BorderThickness="0"
                 CornerRadius="2" />
             <Track x:Name="PART_Track" Grid.Row="1">
                 <Track.DecreaseRepeatButton>
-                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource UiSliderDecreaseRepeatButtonStyle}" />
+                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource UiSliderHorizontalDecreaseRepeatButtonStyle}" />
                 </Track.DecreaseRepeatButton>
                 <Track.Thumb>
                     <Thumb x:Name="Thumb" Style="{StaticResource UiSliderThumbStyle}" />
                 </Track.Thumb>
                 <Track.IncreaseRepeatButton>
-                    <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource UiSliderIncreaseRepeatButtonStyle}" />
+                    <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource UiSliderHorizontalIncreaseRepeatButtonStyle}" />
                 </Track.IncreaseRepeatButton>
             </Track>
             <TickBar
@@ -131,10 +170,10 @@
                 <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
                 <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
             </Trigger>
-            <Trigger Property="IsMouseOver" Value="True">
+            <!--<Trigger Property="IsMouseOver" Value="True">
                 <Setter TargetName="TrackBackground" Property="Background" Value="{DynamicResource SliderTrackFillPointerOver}" />
                 <Setter TargetName="Thumb" Property="Foreground" Value="{DynamicResource SliderThumbBackgroundPointerOver}" />
-            </Trigger>
+            </Trigger>-->
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
@@ -164,13 +203,13 @@
 
             <Track x:Name="PART_Track" Grid.Column="1">
                 <Track.DecreaseRepeatButton>
-                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource UiSliderDecreaseRepeatButtonStyle}" />
+                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource UiSliderVerticalDecreaseRepeatButtonStyle}" />
                 </Track.DecreaseRepeatButton>
                 <Track.Thumb>
                     <Thumb x:Name="Thumb" Style="{StaticResource UiSliderThumbStyle}" />
                 </Track.Thumb>
                 <Track.IncreaseRepeatButton>
-                    <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource UiSliderIncreaseRepeatButtonStyle}" />
+                    <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource UiSliderVerticalIncreaseRepeatButtonStyle}" />
                 </Track.IncreaseRepeatButton>
             </Track>
             <TickBar
