@@ -259,4 +259,9 @@ public interface INavigationView
     /// Allows you to assign a general <see cref="IServiceProvider"/> to the NavigationView that will be used to retrieve page instances and view models.
     /// </summary>
     void SetServiceProvider(IServiceProvider serviceProvider);
+
+    /// <summary>
+    /// 清除缓存
+    /// </summary>
+    void CleanCache();
 }

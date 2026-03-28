@@ -94,4 +94,15 @@ public partial class NavigationService(INavigationViewPageProvider pageProvider)
             throw new ArgumentNullException(nameof(NavigationControl));
         }
     }
+
+    /// <summary>
+    /// 清除缓存
+    /// </summary>
+    public void CleanCache()
+    {
+        if (NavigationControl != null)
+        {
+            NavigationControl.CleanCache();
+        }
+    }
 }

@@ -72,6 +72,11 @@ public interface INavigationService
     void SetNavigationControl(INavigationView navigation);
 
     /// <summary>
+    /// 清除缓存
+    /// </summary>
+    void CleanCache();
+
+    /// <summary>
     /// Navigates the NavigationView to the previous journal entry.
     /// </summary>
     /// <returns><see langword="true"/> if the operation succeeds. <see langword="false"/> otherwise.</returns>

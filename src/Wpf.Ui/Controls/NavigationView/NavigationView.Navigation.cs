@@ -7,7 +7,6 @@
 
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Windows.Controls;
 using Wpf.Ui.Abstractions;
 
 // ReSharper disable once CheckNamespace
@@ -19,7 +18,7 @@ namespace Wpf.Ui.Controls;
 public partial class NavigationView
 {
     protected List<string> Journal { get; } = new(50);
-    
+
     /// <summary>
     /// 页面缓存
     /// </summary>
@@ -219,7 +218,6 @@ public partial class NavigationView
             $"DEBUG | {viewItem.Id} - {(string.IsNullOrEmpty(viewItem.TargetPageTag) ? "NO_TAG" : viewItem.TargetPageTag)} - {viewItem.TargetPageType} | NAVIGATED"
         );
 
-
         // Set up the association before setting DataContext
         if (pageInstance is FrameworkElement frameworkElement)
         {
@@ -279,9 +277,9 @@ public partial class NavigationView
         }
 
         // 先读取缓存的页面
-        if (viewItem is NavigationViewItem { Tag: not null } navigationViewItem)
+        if (viewItem is NavigationViewItem { Id: not null } navigationViewItem)
         {
-            if (_customCache.TryGetValue(navigationViewItem.Tag.ToString() + viewItem.TargetPageType, out var cachePage))
+            if (_customCache.TryGetValue(navigationViewItem.Id.ToString() + viewItem.TargetPageType, out var cachePage))
             {
                 if (cachePage != null)
                 {
@@ -298,9 +296,9 @@ public partial class NavigationView
                                );
 
             // 添加到缓存
-            if (viewItem is NavigationViewItem { Tag: not null } navigationViewItemCache)
+            if (viewItem is NavigationViewItem { Id: not null } navigationViewItemCache)
             {
-                _customCache.Add(navigationViewItemCache.Tag.ToString() + viewItem.TargetPageType, itemInstance);
+                _customCache.Add(navigationViewItemCache.Id.ToString() + viewItem.TargetPageType, itemInstance);
             }
 
             return itemInstance;
@@ -314,9 +312,9 @@ public partial class NavigationView
                                );
 
             // 添加到缓存
-            if (viewItem is NavigationViewItem { Tag: not null } navigationViewItemCache)
+            if (viewItem is NavigationViewItem { Id: not null } navigationViewItemCache)
             {
-                _customCache.Add(navigationViewItemCache.Tag.ToString() + viewItem.TargetPageType, itemInstance);
+                _customCache.Add(navigationViewItemCache.Id.ToString() + viewItem.TargetPageType, itemInstance);
             }
 
             return itemInstance;
@@ -332,6 +330,14 @@ public partial class NavigationView
             );
 
         object? ComputeCachedNavigationInstance() => GetPageInstanceFromCache(viewItem.TargetPageType);
+    }
+
+    /// <summary>
+    /// 清除缓存
+    /// </summary>
+    public void CleanCache()
+    {
+        _customCache.Clear();
     }
 
     private object? GetPageInstanceFromCache(Type? targetPageType)
