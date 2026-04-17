@@ -338,6 +338,8 @@ public partial class NavigationView
     public void CleanCache()
     {
         _customCache.Clear();
+        SelectedItem = null;
+        UpdateContent(null);
     }
 
     private object? GetPageInstanceFromCache(Type? targetPageType)
