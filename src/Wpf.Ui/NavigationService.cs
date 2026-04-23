@@ -63,6 +63,7 @@ public partial class NavigationService(INavigationViewPageProvider pageProvider)
         return NavigationControl!.Navigate(pageTag, dataContext);
     }
 
+
     /// <inheritdoc />
     public bool GoBack()
     {
@@ -100,9 +101,14 @@ public partial class NavigationService(INavigationViewPageProvider pageProvider)
     /// </summary>
     public void CleanCache()
     {
-        if (NavigationControl != null)
-        {
-            NavigationControl.CleanCache();
-        }
+        NavigationControl?.CleanCache();
+    }
+
+    /// <summary>
+    /// 清除选中
+    /// </summary>
+    public void CleanSelected()
+    {
+        NavigationControl?.CleanCache();
     }
 }

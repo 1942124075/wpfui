@@ -77,6 +77,11 @@ public interface INavigationService
     void CleanCache();
 
     /// <summary>
+    /// 清除已选择
+    /// </summary>
+    void CleanSelected();
+
+    /// <summary>
     /// Navigates the NavigationView to the previous journal entry.
     /// </summary>
     /// <returns><see langword="true"/> if the operation succeeds. <see langword="false"/> otherwise.</returns>

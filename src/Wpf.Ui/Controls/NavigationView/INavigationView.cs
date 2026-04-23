@@ -264,4 +264,9 @@ public interface INavigationView
     /// 清除缓存
     /// </summary>
     void CleanCache();
+
+    /// <summary>
+    /// 清除当前选中
+    /// </summary>
+    void CleanSelected();
 }

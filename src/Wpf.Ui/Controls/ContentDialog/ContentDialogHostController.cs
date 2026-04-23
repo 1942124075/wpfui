@@ -349,8 +349,8 @@ internal sealed class ContentDialogHostController
         }
 
         AccessKeyManager.AddAccessKeyPressedHandler(window, HostAccessKeySuppressHandler);
-        CommandManager.AddPreviewExecutedHandler(window, PreviewExecutedSuppressHandler);
-        CommandManager.AddPreviewCanExecuteHandler(window, PreviewCanExecuteSuppressHandler);
+        //CommandManager.AddPreviewExecutedHandler(window, PreviewExecutedSuppressHandler);
+        //CommandManager.AddPreviewCanExecuteHandler(window, PreviewCanExecuteSuppressHandler);
 
         if (window.InputBindings.Count > 0 && _hostInputBindings == null)
         {
@@ -397,8 +397,8 @@ internal sealed class ContentDialogHostController
         }
 
         AccessKeyManager.RemoveAccessKeyPressedHandler(window, HostAccessKeySuppressHandler);
-        CommandManager.RemovePreviewExecutedHandler(window, PreviewExecutedSuppressHandler);
-        CommandManager.RemovePreviewCanExecuteHandler(window, PreviewCanExecuteSuppressHandler);
+        //CommandManager.RemovePreviewExecutedHandler(window, PreviewExecutedSuppressHandler);
+        //CommandManager.RemovePreviewCanExecuteHandler(window, PreviewCanExecuteSuppressHandler);
 
         if (_hostInputBindings != null)
         {

@@ -338,7 +338,16 @@ public partial class NavigationView
     public void CleanCache()
     {
         _customCache.Clear();
+        CleanSelected();
+    }
+
+    /// <summary>
+    /// 清除选中项
+    /// </summary>
+    public void CleanSelected()
+    {
         SelectedItem = null;
+        OnSelectionChanged();
         UpdateContent(null);
     }
 
