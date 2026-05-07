@@ -377,7 +377,7 @@
                             HorizontalScrollBarVisibility="Disabled"
                             Margin="0,0,-4,0"
                             Padding="0,0,4,0"
-                            VerticalScrollBarVisibility="Auto"
+                            VerticalScrollBarVisibility="Hidden"
                             x:Name="PART_ScrollViewer">
                             <ItemsControl
                                 AutomationProperties.AutomationId="NavigationItems"
