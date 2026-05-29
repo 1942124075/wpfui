@@ -248,11 +248,18 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox
         {
             return;
         }
+        
+        //如果没有焦点就退出
+        if (!textBox.IsFocused)
+        {
+            return;
+        }
 
         if (!double.TryParse(textBox.Text, out var _))
         {
             return;
         }
+        
 
         if (e.Delta > 0)
         {
